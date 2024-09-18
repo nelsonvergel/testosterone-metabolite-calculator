@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testosterone Level Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333333;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #555555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            border-radius: 5px;
+        }
+        .results p {
+            font-size: 18px;
+            color: #333333;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Testosterone Level Predictor</h2>
+    <label for="tt">Total Testosterone (TT) in ng/dL:</label>
+    <input type="number" id="tt" name="tt" min="0" placeholder="Enter your TT level">
+
+    <button onclick="calculateLevels()">Calculate</button>
+
+    <div id="error-message" class="error"></div>
+
+    <div id="results" class="results" style="display:none;">
+        <p><strong>Free Testosterone (FT):</strong> <span id="ft"></span> ng/dL</p>
+        <p><strong>Estradiol (E2):</strong> <span id="e2"></span> pg/mL</p>
+        <p><strong>Dihydrotestosterone (DHT):</strong> <span id="dht"></span> ng/dL</p>
+    </div>
+</div>
+
+<script>
+    function calculateLevels() {
+        // Get the TT value from the input
+        var ttInput = document.getElementById('tt').value;
+        var tt = parseFloat(ttInput);
+
+        // Get references to the results and error message elements
+        var resultsDiv = document.getElementById('results');
+        var errorMessage = document.getElementById('error-message');
+
+        // Clear previous results and errors
+        resultsDiv.style.display = 'none';
+        errorMessage.textContent = '';
+
+        // Validate the input
+        if (isNaN(tt) || tt <= 0) {
+            errorMessage.textContent = 'Please enter a valid positive number for TT.';
+            return;
+        }
+
+        // Calculate Free Testosterone (FT)
+        var ft = 0.02 * tt;
+        ft = ft.toFixed(2);
+
+        // Calculate Estradiol (E2)
+        var e2Numerator = 138.3 * tt * 0.8;
+        var e2Denominator = 1470.1 + tt;
+        var e2 = e2Numerator / e2Denominator;
+        e2 = e2.toFixed(2);
+
+        // Calculate Dihydrotestosterone (DHT)
+        var dhtNumerator = 269.4 * tt;
+        var dhtDenominator = 2389.6 + tt;
+        var dht = dhtNumerator / dhtDenominator;
+        dht = dht.toFixed(2);
+
+        // Display the results
+        document.getElementById('ft').textContent = ft;
+        document.getElementById('e2').textContent = e2;
+        document.getElementById('dht').textContent = dht;
+        resultsDiv.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
